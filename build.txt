@@ -1,0 +1,14 @@
+-Iinclude
+main.cpp
+src/random.cpp
+src/commands.cpp
+src/controllers.cpp
+src/linear_algebra.cpp
+src/linear_regression.cpp
+src/data_generator.cpp
+src/print_utils.cpp
+src/helpers.cpp
+src/globals.cpp
+src/csv.cpp
+-o
+app
