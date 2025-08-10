@@ -2,12 +2,24 @@
 #include <vector>
 #include <string>
 
+struct CommandInfo
+{
+    std::string command_name;
+    std::string command_description;
+};
+
 using Parameters = std::vector<double>;
 
 struct LabeledData
 {
     std::vector<std::vector<double>> x;
     std::vector<double> y;
+};
+
+struct Dataset
+{
+    bool generated;
+    LabeledData labeled_data;
 };
 
 struct Model
@@ -19,7 +31,8 @@ struct Model
 
 using Models = std::vector<Model>;
 
-struct TrainingSummary{
+struct TrainingSummary
+{
     int model_id;
     std::string model_name;
     int num_train_samples;

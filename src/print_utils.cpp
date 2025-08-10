@@ -33,13 +33,11 @@ void print_labeled_data(LabeledData data)
 
 void print_model(Model model)
 {
-    int size = model.parameters.size() * 10;
-    std::cout << "+-----+------------------------------+\n";
-    std::cout << "|" << std::left << std::setw(5) << "ID" << "|" << std::setw(30) << "NAME" << "|\n";
-    std::cout << "+-----+------------------------------+\n";
-    std::cout << "|" << std::left << std::setw(5) << model.id << "|" << std::setw(30) << model.name << "|\n";
-    std::cout << "+-----+------------------------------+\n";
-    std::cout << "PARAMETERS ";
+    std::cout << "+----+--------------------+----------+\n";
+    std::cout << "|" << std::left << std::setw(4) << "ID" << "|" << std::setw(20) << "NAME" << "|" << std::setw(10) << "PARAMS" << "|\n";
+    std::cout << "+----+--------------------+----------+\n";
+    std::cout << "|" << std::left << std::setw(4) << model.id << "|" << std::setw(20) << model.name << "|" << std::setw(10) << model.parameters.size() << "|\n";
+    std::cout << "+----+--------------------+----------+\n";
     print_vector(model.parameters);
     std::cout << "\n";
 }
@@ -120,13 +118,18 @@ void show_summary(TrainingSummary summary)
 
 void show_evaluation(Model model)
 {
-    double cost_seen = cost_fn(model.parameters, TRAINING_DATA);
-    double cost_unseen = cost_fn(model.parameters, TESTING_DATA);
+    if (TRAINING_DATASET.labeled_data.x.empty() || TRAINING_DATASET.labeled_data.y.empty())
+    {
+        std::cout << "Cannot evaluate: Split training data first.\n";
+        return;
+    }
+    double cost_seen = cost_fn(model.parameters, TRAINING_DATASET.labeled_data);
+    double cost_unseen = cost_fn(model.parameters, TESTING_DATASET.labeled_data);
     double cost_diff = cost_unseen - cost_seen;
-    double mae_seen = MAE(model.parameters, TRAINING_DATA);
-    double mae_unseen = MAE(model.parameters, TESTING_DATA);
-    double rsq_seen = R_SQUARED(model.parameters, TRAINING_DATA);
-    double rsq_unseen = R_SQUARED(model.parameters, TESTING_DATA);
+    double mae_seen = MAE(model.parameters, TRAINING_DATASET.labeled_data);
+    double mae_unseen = MAE(model.parameters, TESTING_DATASET.labeled_data);
+    double rsq_seen = R_SQUARED(model.parameters, TRAINING_DATASET.labeled_data);
+    double rsq_unseen = R_SQUARED(model.parameters, TESTING_DATASET.labeled_data);
     std::string name = model.name;
     std::cout << "+-----------------------------------------------+\n";
     std::cout << "|               MODEL EVALUATION                |\n";
@@ -140,7 +143,7 @@ void show_evaluation(Model model)
     std::cout << "|" << std::left << std::setw(25) << "MAE (unseen data)" << ": " << std::setw(20) << mae_unseen << "|\n";
     std::cout << "|" << std::left << std::setw(25) << "R_Squared (seen data)" << ": " << std::setw(20) << rsq_seen << "|\n";
     std::cout << "|" << std::left << std::setw(25) << "R_Squared (unseen data)" << ": " << std::setw(20) << rsq_unseen << "|\n";
-    std::cout << "|" << std::left << std::setw(25) << "No. seen data" << ": " << std::setw(20) << TRAINING_DATA.x.size() << "|\n";
-    std::cout << "|" << std::left << std::setw(25) << "No. unseen data" << ": " << std::setw(20) << TESTING_DATA.x.size() << "|\n";
+    std::cout << "|" << std::left << std::setw(25) << "No. seen data" << ": " << std::setw(20) << TRAINING_DATASET.labeled_data.x.size() << "|\n";
+    std::cout << "|" << std::left << std::setw(25) << "No. unseen data" << ": " << std::setw(20) << TESTING_DATASET.labeled_data.x.size() << "|\n";
     std::cout << "+-----------------------------------------------+\n";
 }

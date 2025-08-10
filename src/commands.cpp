@@ -62,10 +62,6 @@ void command_processor(std::vector<std::string> commands)
             {
                 show_models();
             }
-            else if (command == "load data")
-            {
-                load_data("");
-            }
             else if (command == "train model")
             {
                 train_model();
